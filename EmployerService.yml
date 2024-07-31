@@ -1,0 +1,37 @@
+openapi: 3.0.1
+info:
+  title: Employer Service API
+  description: API for managing employers.
+  version: 1.0.0
+servers:
+  - url: http://localhost:5000/api
+paths:
+  /employers:
+    get:
+      summary: Get employer by name
+      parameters:
+        - name: name
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Employer retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Employer'
+        '404':
+          description: Employer not found
+components:
+  schemas:
+    Employer:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "employer123"
+        name:
+          type: string
+          example: "Acme Corp"
