@@ -1,0 +1,160 @@
+openapi: 3.0.1
+info:
+  title: User Service API
+  description: API for managing users.
+  version: 1.0.0
+servers:
+  - url: http://localhost:5000/api
+paths:
+  /users:
+    post:
+      summary: Create a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+                - country
+                - access_type
+              properties:
+                email:
+                  type: string
+                  example: "user@example.com"
+                password:
+                  type: string
+                  example: "P@ssw0rd!"
+                country:
+                  type: string
+                  example: "US"
+                access_type:
+                  type: string
+                  enum: [dtc, employer]
+                  example: "dtc"
+                full_name:
+                  type: string
+                  example: "John Doe"
+                employer_id:
+                  type: string
+                  example: "employer123"
+                birth_date:
+                  type: string
+                  format: date
+                  example: "1990-01-01"
+                salary:
+                  type: number
+                  format: decimal
+                  example: 50000.00
+      responses:
+        '201':
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Bad request
+    get:
+      summary: Get user by email
+      parameters:
+        - name: email
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: User not found
+  /users/{id}:
+    get:
+      summary: Get user by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: User not found
+    patch:
+      summary: Update user
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  field:
+                    type: string
+                    example: "country"
+                  value:
+                    type: string
+                    example: "US"
+      responses:
+        '200':
+          description: User updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Bad request
+        '404':
+          description: User not found
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "user123"
+        email:
+          type: string
+          example: "user@example.com"
+        country:
+          type: string
+          example: "US"
+        access_type:
+          type: string
+          enum: [dtc, employer]
+          example: "dtc"
+        full_name:
+          type: string
+          example: "John Doe"
+        employer_id:
+          type: string
+          example: "employer123"
+        birth_date:
+          type: string
+          format: date
+          example: "1990-01-01"
+        salary:
+          type: number
+          format: decimal
+          example: 50000.00
